@@ -12,6 +12,8 @@
 #include <PN532_SPI.h>
 #include <PN532.h>
 #include <NfcAdapter.h>
+#include <Stepper.h>
+
 
 PN532_SPI pn532spi(SPI, 10); //SS
 NfcAdapter nfc = NfcAdapter(pn532spi);
@@ -21,6 +23,8 @@ NfcAdapter nfc = NfcAdapter(pn532spi);
 #define GateII 3
 #define GateIII 4
 String incomingByte;
+Stepper myStepper(stepsPerRevolution, 6, 7, 8, 9);
+const int stepsPerRevolution = 200; 
 
 void setup() {
   // put your setup code here, to run once:
@@ -29,6 +33,8 @@ void setup() {
   pinMode(GateII, OUTPUT);
   pinMode(GateIII, OUTPUT);
   pinMode(LED_BUILTIN, OUTPUT);
+  myStepper.setSpeed(60);
+  
   //nfc.begin();
 }
 
@@ -58,27 +64,24 @@ void loop() {
 }
 
 void openA(){
-  digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
-  delay(1000);       
+  digitalWrite(2, HIGH);   // turn the LED on (HIGH is the voltage level)
+  delay(100);       
   Serial.print("A open");
   // wait for a second
-  digitalWrite(LED_BUILTIN, LOW);    // turn the LED off by making the voltage LOW
+  digitalWrite(2, LOW);    // turn the LED off by making the voltage LOW
   delay(1000);  
 }
 
 void openB(){
-  digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
-  delay(1000);                       // wait for a second
-  digitalWrite(LED_BUILTIN, LOW);    // turn the LED off by making the voltage LOW
+  digitalWrite(3, HIGH);   // turn the LED on (HIGH is the voltage level)
+  delay(100);                       // wait for a second
+  digitalWrite(3, LOW);    // turn the LED off by making the voltage LOW
   delay(1000);  
 }
 
 void openC(){
-  digitalWrite(LED_BUILTIN, HIGH);   // turn the LED on (HIGH is the voltage level)
-  delay(1000);                       // wait for a second
-  digitalWrite(LED_BUILTIN, LOW);    // turn the LED off by making the voltage LOW
-  delay(1000);  
+  myStepper.step(stepsPerRevolution);
+  delay(500);  
 }
-
 
 
